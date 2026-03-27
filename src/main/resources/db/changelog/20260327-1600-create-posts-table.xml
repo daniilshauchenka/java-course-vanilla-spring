@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="20260327-1600-create-posts-table" author="Daniil Shauchenka">
+
+        <createTable tableName="posts">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="text" type="CLOB">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="likes_count" type="INT" defaultValueNumeric="0"/>
+            <column name="comments_count" type="INT" defaultValueNumeric="0"/>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>
