@@ -1,0 +1,14 @@
+[versions]
+spring = "6.1.6"
+junit = "5.10.0"
+h2 = "2.2.224"
+lombok = "1.18.30"
+
+[libraries]
+# BOM
+spring-bom = { module = "org.springframework:spring-framework-bom", version.ref = "spring" }
+
+# libs
+h2 = { module = "com.h2database:h2", version.ref = "h2" }
+junit = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }

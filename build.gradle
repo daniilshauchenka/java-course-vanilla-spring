@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+}
+
+group = 'ru.yandex'
+version = '1.0-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation platform(libs.spring.bom)
+    implementation 'org.springframework:spring-context'
+    implementation 'org.springframework:spring-jdbc'
+
+    implementation libs.h2
+
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
+
+    testImplementation libs.junit
+}
+
+test {
+    useJUnitPlatform()
+}
