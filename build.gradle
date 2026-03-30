@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'war'
 }
 
 group = 'ru.yandex'
@@ -17,13 +18,21 @@ repositories {
 
 dependencies {
     implementation platform(libs.spring.bom)
+    implementation platform("com.fasterxml.jackson:jackson-bom:2.17.0")
+
+
     implementation 'org.springframework:spring-context'
     implementation 'org.springframework:spring-jdbc'
+    implementation 'org.springframework:spring-webmvc'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'org.springframework:spring-webmvc'
+
 
     implementation libs.h2
     implementation libs.liquibase
 
     compileOnly libs.lombok
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
     annotationProcessor libs.lombok
 
     testImplementation libs.junit
