@@ -12,5 +12,9 @@ public final class ApiPath {
         public static final String BASE = API + "/posts";
     }
 
+    public static final class Comments {
+        public static final String BASE = Posts.BASE + "/{postId}/comments";
+    }
+
 
 }

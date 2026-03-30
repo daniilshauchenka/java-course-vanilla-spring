@@ -1,5 +1,8 @@
 package ru.yandex.model.dto;
 
-public class CommentCreateRequest {
+import lombok.Getter;
 
+@Getter
+public class CommentCreateRequest {
+    private String text;
 }
