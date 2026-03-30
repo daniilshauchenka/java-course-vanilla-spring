@@ -1,11 +1,13 @@
 package ru.yandex.mapper;
 
+import lombok.experimental.UtilityClass;
 import ru.yandex.model.dto.PostCreateRequest;
 import ru.yandex.model.dto.PostDto;
 import ru.yandex.model.entity.PostEntity;
 
+@UtilityClass
 public class PostMapper {
-    public static PostEntity toEntity(PostCreateRequest request) {
+    public static PostEntity toEntityFromCreateRequest(PostCreateRequest request) {
         return PostEntity.builder()
             .title(request.getTitle())
             .text(request.getText())
@@ -15,7 +17,7 @@ public class PostMapper {
             .build();
     }
 
-    public static PostDto toResponse(PostEntity post) {
+    public static PostDto toDto(PostEntity post) {
         return PostDto.builder()
             .id(post.getId())
             .title(post.getTitle())

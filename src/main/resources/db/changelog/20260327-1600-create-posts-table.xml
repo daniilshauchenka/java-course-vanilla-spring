@@ -6,10 +6,17 @@
         http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
 
-    <changeSet id="20260327-1600-create-posts-table" author="Daniil Shauchenka">
+    <changeSet id="20260330-0751-create-posts-seq" author="Daniil Shauchenka">
+        <createSequence
+            sequenceName="posts_seq"
+            startValue="1"
+            incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="20260327-1601-create-posts-table" author="Daniil Shauchenka">
 
         <createTable tableName="posts">
-            <column name="id" type="BIGINT" autoIncrement="true">
+            <column name="id" type="BIGINT">
                 <constraints primaryKey="true"/>
             </column>
 
@@ -26,5 +33,7 @@
         </createTable>
 
     </changeSet>
+
+
 
 </databaseChangeLog>
