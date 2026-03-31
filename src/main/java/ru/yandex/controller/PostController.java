@@ -35,7 +35,7 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public PostDto getPostById(@PathVariable Long id) {
+    public PostDto getPostById(@PathVariable("id") Long id) {
         return postService.getPostById(id);
     }
 
@@ -45,12 +45,12 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}")
-    public void deletePost(@PathVariable Long id) {
+    public void deletePost(@PathVariable("id") Long id) {
         postService.deletePost(id);
     }
 
     @PostMapping("/{id}/likes")
-    public Long incrementLikes(@PathVariable Long id) {
+    public Long incrementLikes(@PathVariable("id") Long id) {
         return postService.incrementLikes(id);
     }
 

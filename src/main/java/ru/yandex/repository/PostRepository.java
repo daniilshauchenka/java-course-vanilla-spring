@@ -15,15 +15,13 @@ public class PostRepository {
     private final JdbcTemplate jdbc;
 
     public Long save(PostEntity post) {
-
-        Long id = jdbc.queryForObject("SELECT NEXT VALUE FOR post_seq", Long.class);
-
+        Long id = jdbc.queryForObject("SELECT NEXT VALUE FOR posts_seq", Long.class);
         String sql = """
             INSERT INTO posts(id, title, text, likes_count, comments_count)
             VALUES (?, ?, ?, ?, ?)
             """;
-
-        jdbc.update(sql,
+        jdbc.update(
+            sql,
             id,
             post.getTitle(),
             post.getText(),
@@ -36,14 +34,15 @@ public class PostRepository {
 
     public List<PostEntity> findPosts(String search, int offset, int limit) {
         String sql = """
-        SELECT *
-        FROM posts
-        WHERE LOWER(title) LIKE LOWER(?)
-        ORDER BY id DESC
-        LIMIT ? OFFSET ?
-        """;
+            SELECT *
+            FROM posts
+            WHERE LOWER(title) LIKE LOWER(?)
+            ORDER BY id DESC
+            LIMIT ? OFFSET ?
+            """;
 
-        return jdbc.query(sql, this::mapRow,
+        return jdbc.query(
+            sql, this::mapRow,
             "%" + search + "%",
             limit,
             offset
@@ -52,10 +51,10 @@ public class PostRepository {
 
     public int countPosts(String search) {
         String sql = """
-        SELECT COUNT(*)
-        FROM posts
-        WHERE LOWER(title) LIKE LOWER(?)
-        """;
+            SELECT COUNT(*)
+            FROM posts
+            WHERE LOWER(title) LIKE LOWER(?)
+            """;
 
         return jdbc.queryForObject(sql, Integer.class, "%" + search + "%");
     }
@@ -67,8 +66,10 @@ public class PostRepository {
     }
 
     public boolean deleteById(Long id) {
-        String sql = "DELETE FROM posts WHERE id = ?";
-        return jdbc.update(sql, id) > 0;
+        jdbc.update("DELETE FROM post_tags WHERE post_id = ?", id);
+        jdbc.update("DELETE FROM comments WHERE post_id = ?", id);
+        int rows = jdbc.update("DELETE FROM posts WHERE id = ?", id);
+        return rows > 0;
     }
 
     public Long incrementLikes(Long id) {

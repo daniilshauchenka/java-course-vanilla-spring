@@ -1,5 +1,6 @@
 package ru.yandex.mapper;
 
+import java.util.List;
 import lombok.experimental.UtilityClass;
 import ru.yandex.model.dto.PostCreateRequest;
 import ru.yandex.model.dto.PostDto;
@@ -17,12 +18,12 @@ public class PostMapper {
             .build();
     }
 
-    public static PostDto toDto(PostEntity post) {
+    public static PostDto toDto(PostEntity post, List<String> tags) {
         return PostDto.builder()
             .id(post.getId())
             .title(post.getTitle())
             .text(post.getText())
-            .tags(post.getTags())
+            .tags(tags)
             .likesCount(post.getLikesCount())
             .commentsCount(post.getCommentsCount())
             .build();

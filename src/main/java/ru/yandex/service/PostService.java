@@ -15,7 +15,7 @@ import ru.yandex.repository.PostRepository;
 public class PostService {
 
     private final PostRepository postRepository;
-
+    private final TagService tagService;
 
     public PostPageResponse getPosts(String search, int pageNumber, int pageSize) {
 
@@ -25,7 +25,7 @@ public class PostService {
         List<PostEntity> posts = postRepository.findPosts(search, offset, pageSize);
 
         List<PostDto> dtos = posts.stream()
-            .map(PostMapper::toDto)
+            .map(post -> PostMapper.toDto(post, tagService.getTagsForPost(post.getId())))
             .map(this::truncateText)
             .toList();
 
@@ -41,15 +41,17 @@ public class PostService {
 
     public PostDto getPostById(Long id) {
         PostEntity post = postRepository.findById(id);
-        return PostMapper.toDto(post);
+        List<String> tags = tagService.getTagsForPost(id);
+        return PostMapper.toDto(post, tags);
     }
 
-
-    public PostDto createPost(PostCreateRequest createRequest) {
-        PostEntity post = PostMapper.toEntityFromCreateRequest(createRequest);
+    public PostDto createPost(PostCreateRequest request) {
+        PostEntity post = PostMapper.toEntityFromCreateRequest(request);
         Long id = postRepository.save(post);
+        tagService.attachTagsToPost(id, request.getTags());
         PostEntity saved = postRepository.findById(id);
-        return PostMapper.toDto(saved);
+        List<String> tags = tagService.getTagsForPost(id);
+        return PostMapper.toDto(saved, tags);
     }
 
     public void deletePost(Long id) {
