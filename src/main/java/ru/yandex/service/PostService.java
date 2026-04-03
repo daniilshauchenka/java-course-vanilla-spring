@@ -125,9 +125,15 @@ public class PostService {
 
     public ImageDto getImage(Long postId) {
         getPostOrThrow(postId);
-        return postRepository.getImage(postId);
-    }
 
+        ImageDto image = postRepository.getImage(postId);
+
+        if (image == null || image.getData() == null) {
+            throw new MyException(ExceptionType.IMAGE_NOT_FOUND, postId);
+        }
+
+        return image;
+    }
     private PostEntity getPostOrThrow(Long id) {
         PostEntity post = postRepository.findById(id);
         if (post == null) {

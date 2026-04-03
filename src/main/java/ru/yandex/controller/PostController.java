@@ -77,11 +77,8 @@ public class PostController {
     }
 
     @GetMapping("/{id}/image")
-    public ResponseEntity<byte[]> getImage(@PathVariable("id") Long id) {
+    public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
         ImageDto image = postService.getImage(id);
-        if (image.getData() == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok()
             .contentType(MediaType.parseMediaType(image.getContentType()))
             .body(image.getData());

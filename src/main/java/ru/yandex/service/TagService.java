@@ -34,6 +34,12 @@ public class TagService {
     public Map<Long, List<String>> getTagsForPosts(List<Long> postIds) {
         return tagRepository.findTagsByPostIds(postIds);
     }
+
+    public List<String> getTagsForPost(Long postId) {
+        return getTagsForPosts(List.of(postId))
+            .getOrDefault(postId, List.of());
+    }
+
     public void replaceTags(Long postId, List<String> tags) {
         postTagRepository.deleteByPostId(postId);
         attachTagsToPost(postId, tags);

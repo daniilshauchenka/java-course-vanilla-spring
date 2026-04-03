@@ -15,6 +15,7 @@ public enum ExceptionType {
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "Validation failed: %s"),
     INVALID_PAGINATION(HttpStatus.BAD_REQUEST, "Invalid pagination parameters: %s %s"),
     COMMENT_POST_MISMATCH(HttpStatus.BAD_REQUEST, "Comment %s does not belong to post %s"),
+    IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "Image not found for post %s"),
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
 
     private final HttpStatus status;

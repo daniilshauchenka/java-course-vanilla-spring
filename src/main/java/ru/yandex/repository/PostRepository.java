@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import ru.yandex.model.dto.ImageDto;
 import ru.yandex.model.entity.PostEntity;
 
 @Repository
@@ -106,15 +107,18 @@ public class PostRepository {
         jdbc.update(sql, image, imageType, postId);
     }
 
-    public PostEntity getImage(Long postId) {
+    public ImageDto getImage(Long postId) {
         String sql = "SELECT image, image_type FROM posts WHERE id = ?";
 
-        return jdbc.queryForObject(sql, (rs, rowNum) ->
-                PostEntity.builder()
-                    .image(rs.getBytes("image"))
-                    .imageType(rs.getString("image_type"))
-                    .build()
-            , postId);
+        List<ImageDto> result = jdbc.query(sql, (rs, rowNum) ->
+                new ImageDto(
+                    rs.getBytes("image"),
+                    rs.getString("image_type")
+                ),
+            postId
+        );
+
+        return result.isEmpty() ? null : result.get(0);
     }
 
     public void update(PostEntity post) {
