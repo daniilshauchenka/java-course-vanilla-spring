@@ -37,13 +37,14 @@
         </init-param>
 
         <load-on-startup>1</load-on-startup>
+
+        <multipart-config>
+            <max-file-size>5242880</max-file-size> <!-- 5MB -->
+            <max-request-size>5242880</max-request-size>
+            <file-size-threshold>0</file-size-threshold>
+        </multipart-config>
     </servlet>
 
-<!--    <listener>-->
-<!--        <listener-class>-->
-<!--            org.springframework.web.context.ContextLoaderListener-->
-<!--        </listener-class>-->
-<!--    </listener>-->
 
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
