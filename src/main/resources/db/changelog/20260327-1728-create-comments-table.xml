@@ -6,6 +6,13 @@
         http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
 
+    <changeSet id="20260402-1549-create-comments-seq" author="Daniil Shauchenka">
+        <createSequence
+            sequenceName="comments_seq"
+            startValue="1"
+            incrementBy="1"/>
+    </changeSet>
+
     <changeSet id="20260327-1728-create-comments-table" author="Daniil Shauchenka">
 
 

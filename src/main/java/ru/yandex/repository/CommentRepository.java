@@ -15,14 +15,12 @@ public class CommentRepository {
     private final JdbcTemplate jdbc;
 
     public Long save(CommentEntity comment) {
-        String sql = """
-            INSERT INTO comments(text, post_id)
-            VALUES (?, ?)
-        """;
-
-        jdbc.update(sql, comment.getText(), comment.getPostId());
-
-        return jdbc.queryForObject("SELECT MAX(id) FROM comments", Long.class);
+        Long id = jdbc.queryForObject("SELECT NEXT VALUE FOR comments_seq", Long.class);
+        jdbc.update("""
+                INSERT INTO comments(id, text, post_id)
+                VALUES (?, ?, ?)
+            """, id, comment.getText(), comment.getPostId());
+        return id;
     }
 
     public List<CommentEntity> findByPostId(Long postId) {
@@ -34,19 +32,24 @@ public class CommentRepository {
     public CommentEntity findById(Long commentId) {
         String sql = "SELECT * FROM comments WHERE id = ?";
 
-        return jdbc.queryForObject(sql, this::mapRow, commentId);
+        List<CommentEntity> result = jdbc.query(sql, this::mapRow, commentId);
+        return result.isEmpty() ? null : result.getFirst();
     }
 
     public void delete(Long commentId) {
         jdbc.update("DELETE FROM comments WHERE id = ?", commentId);
     }
 
+    public void deleteByPostId(Long postId) {
+        jdbc.update("DELETE FROM comments WHERE post_id = ?", postId);
+    }
+
     public void update(CommentEntity comment) {
         String sql = """
-            UPDATE comments
-            SET text = ?
-            WHERE id = ?
-        """;
+                UPDATE comments
+                SET text = ?
+                WHERE id = ?
+            """;
 
         jdbc.update(sql, comment.getText(), comment.getId());
     }

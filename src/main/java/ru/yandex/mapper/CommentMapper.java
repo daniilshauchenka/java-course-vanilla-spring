@@ -1,17 +1,14 @@
 package ru.yandex.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.yandex.model.dto.CommentCreateRequest;
+import ru.yandex.model.dto.CommentCreateUpdateRequest;
 import ru.yandex.model.dto.CommentDto;
-import ru.yandex.model.dto.PostCreateRequest;
-import ru.yandex.model.dto.PostDto;
 import ru.yandex.model.entity.CommentEntity;
-import ru.yandex.model.entity.PostEntity;
 
 @UtilityClass
 public class CommentMapper {
 
-    public static CommentEntity toEntity(Long postId, CommentCreateRequest request) {
+    public static CommentEntity toEntity(Long postId, CommentCreateUpdateRequest request) {
         return CommentEntity.builder()
             .text(request.getText())
             .postId(postId)
