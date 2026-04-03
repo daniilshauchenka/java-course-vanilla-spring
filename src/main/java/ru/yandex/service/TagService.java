@@ -1,14 +1,10 @@
 package ru.yandex.service;
 
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.yandex.mapper.CommentMapper;
-import ru.yandex.model.dto.CommentCreateRequest;
-import ru.yandex.model.dto.CommentDto;
-import ru.yandex.model.entity.CommentEntity;
 import ru.yandex.model.entity.TagEntity;
-import ru.yandex.repository.CommentRepository;
 import ru.yandex.repository.PostTagRepository;
 import ru.yandex.repository.TagRepository;
 
@@ -35,10 +31,9 @@ public class TagService {
         }
     }
 
-    public List<String> getTagsForPost(Long postId) {
-        return tagRepository.findTagsByPostId(postId);
+    public Map<Long, List<String>> getTagsForPosts(List<Long> postIds) {
+        return tagRepository.findTagsByPostIds(postIds);
     }
-
     public void replaceTags(Long postId, List<String> tags) {
         postTagRepository.deleteByPostId(postId);
         attachTagsToPost(postId, tags);

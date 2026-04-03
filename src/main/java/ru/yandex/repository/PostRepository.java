@@ -61,13 +61,12 @@ public class PostRepository {
 
     public PostEntity findById(Long id) {
         String sql = "SELECT * FROM posts WHERE id = ?";
-
-        return jdbc.queryForObject(sql, this::mapRow, id);
+        List<PostEntity> result = jdbc.query(sql, this::mapRow, id);
+        return result.isEmpty() ? null : result.get(0);
     }
 
     public boolean deleteById(Long id) {
         jdbc.update("DELETE FROM post_tags WHERE post_id = ?", id);
-        jdbc.update("DELETE FROM comments WHERE post_id = ?", id);
         int rows = jdbc.update("DELETE FROM posts WHERE id = ?", id);
         return rows > 0;
     }
@@ -95,5 +94,40 @@ public class PostRepository {
             .likesCount(rs.getInt("likes_count"))
             .commentsCount(rs.getInt("comments_count"))
             .build();
+    }
+
+    public void updateImage(Long postId, byte[] image, String imageType) {
+        String sql = """
+        UPDATE posts
+        SET image = ?, image_type = ?
+        WHERE id = ?
+    """;
+
+        jdbc.update(sql, image, imageType, postId);
+    }
+
+    public PostEntity getImage(Long postId) {
+        String sql = "SELECT image, image_type FROM posts WHERE id = ?";
+
+        return jdbc.queryForObject(sql, (rs, rowNum) ->
+                PostEntity.builder()
+                    .image(rs.getBytes("image"))
+                    .imageType(rs.getString("image_type"))
+                    .build()
+            , postId);
+    }
+
+    public void update(PostEntity post) {
+        String sql = """
+        UPDATE posts
+        SET title = ?, text = ?
+        WHERE id = ?
+    """;
+
+        jdbc.update(sql,
+            post.getTitle(),
+            post.getText(),
+            post.getId()
+        );
     }
 }

@@ -35,5 +35,12 @@
     </changeSet>
 
 
+    <changeSet id="20260331-1423-add-posts-images" author="Daniil Shauchenka">
+        <addColumn tableName="posts">
+            <column name="image" type="BLOB"/>
+            <column name="image_type" type="VARCHAR(50)"/>
+        </addColumn>
+    </changeSet>
+
 
 </databaseChangeLog>

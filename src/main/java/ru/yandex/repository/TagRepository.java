@@ -2,7 +2,11 @@ package ru.yandex.repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,19 +25,38 @@ public class TagRepository {
     }
 
     public Long save(String name) {
-        jdbc.update("INSERT INTO tags(name) VALUES (?)", name);
-        return jdbc.queryForObject("SELECT MAX(id) FROM tags", Long.class);
+        Long id = jdbc.queryForObject("SELECT NEXT VALUE FOR tags_seq", Long.class);
+        jdbc.update("INSERT INTO tags(id, name) VALUES (?, ?)", id, name);
+        return id;
     }
 
-    public List<String> findTagsByPostId(Long postId) {
-        String sql = """
-            SELECT t.name
-            FROM tags t
-            JOIN post_tags pt ON t.id = pt.tag_id
-            WHERE pt.post_id = ?
-        """;
+    public Map<Long, List<String>> findTagsByPostIds(List<Long> postIds) {
+        if (postIds.isEmpty()) {
+            return Map.of();
+        }
+        String inSql = postIds.stream()
+            .map(id -> "?")
+            .collect(Collectors.joining(","));
 
-        return jdbc.queryForList(sql, String.class, postId);
+        String sql = """
+                SELECT pt.post_id, t.name
+                FROM tags t
+                JOIN post_tags pt ON t.id = pt.tag_id
+                WHERE pt.post_id IN (%s)
+            """.formatted(inSql);
+
+        List<Map<String, Object>> rows = jdbc.queryForList(sql, postIds.toArray());
+
+        Map<Long, List<String>> result = new HashMap<>();
+
+        for (Map<String, Object> row : rows) {
+            Long postId = ((Number) row.get("post_id")).longValue();
+            String tag = (String) row.get("name");
+
+            result.computeIfAbsent(postId, k -> new ArrayList<>()).add(tag);
+        }
+
+        return result;
     }
 
     private TagEntity mapRow(ResultSet rs, int rowNum) throws SQLException {

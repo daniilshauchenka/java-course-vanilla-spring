@@ -6,6 +6,15 @@
         http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
 
+
+    <changeSet id="20260402-1542-create-tags-seq" author="Daniil Shauchenka">
+        <createSequence
+            sequenceName="tags_seq"
+            startValue="1"
+            incrementBy="1"/>
+    </changeSet>
+
+
     <changeSet id="20260327-1730-create-tags-table" author="Daniil Shauchenka">
 
         <createTable tableName="tags">

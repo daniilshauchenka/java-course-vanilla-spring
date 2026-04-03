@@ -24,5 +24,7 @@ public class PostEntity {
 
     private LocalDateTime createdAt;
 
-    private String imagePath;
+
+    private byte[] image;
+    private String imageType;
 }
