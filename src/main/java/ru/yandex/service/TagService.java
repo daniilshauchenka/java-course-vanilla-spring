@@ -1,7 +1,10 @@
 package ru.yandex.service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.model.entity.TagEntity;
@@ -19,7 +22,8 @@ public class TagService {
         if (tags == null || tags.isEmpty()) {
             return;
         }
-        for (String tagName : tags) {
+        Set<String> uniqueTags = new HashSet<>(tags);
+        for (String tagName : uniqueTags) {
             TagEntity existing = tagRepository.findByName(tagName);
             Long tagId;
             if (existing == null) {
@@ -37,7 +41,7 @@ public class TagService {
 
     public List<String> getTagsForPost(Long postId) {
         return getTagsForPosts(List.of(postId))
-            .getOrDefault(postId, List.of());
+                .getOrDefault(postId, List.of());
     }
 
     public void replaceTags(Long postId, List<String> tags) {
