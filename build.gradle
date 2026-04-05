@@ -1,6 +1,18 @@
 plugins {
     id 'java'
     id 'war'
+    id 'com.diffplug.spotless' version '6.25.0'
+}
+
+spotless {
+    java {
+        target 'src/**/*.java'
+
+        removeUnusedImports()
+        importOrder()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }
 
 group = 'ru.yandex'
@@ -35,9 +47,25 @@ dependencies {
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
     annotationProcessor libs.lombok
 
-    testImplementation libs.junit
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testImplementation 'org.mockito:mockito-core:5.7.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.7.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.springframework:spring-test'
+    testImplementation 'com.fasterxml.jackson.core:jackson-databind'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+    testImplementation 'com.jayway.jsonpath:json-path:2.9.0'
 }
 
 test {
     useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+    }
 }
+
+
+
+
