@@ -4,9 +4,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.yandex.exception.ExceptionType;
 import ru.yandex.exception.MyException;
 import ru.yandex.model.dto.ErrorResponse;
+
+import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -23,6 +26,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity
             .status(type.getStatus())
             .body(response);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<List> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(List.of());
     }
 
     @ExceptionHandler(Exception.class)
