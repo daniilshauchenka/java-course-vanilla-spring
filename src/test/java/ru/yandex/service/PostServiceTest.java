@@ -19,12 +19,14 @@ import ru.yandex.exception.MyException;
 import ru.yandex.model.dto.PostCreateRequest;
 import ru.yandex.model.dto.PostDto;
 import ru.yandex.model.dto.PostPageResponse;
+import ru.yandex.model.dto.PostUpdateRequest;
 import ru.yandex.model.entity.PostEntity;
 import ru.yandex.repository.CommentRepository;
 import ru.yandex.repository.PostRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class PostServiceTest {
+
     @Mock
     private PostRepository postRepository;
 
@@ -45,34 +47,32 @@ public class PostServiceTest {
         int size = 2;
 
         PostEntity post1 = PostEntity.builder()
-                .id(1L)
-                .title("title1")
-                .text("text1")
-                .likesCount(1)
-                .commentsCount(1)
-                .build();
+            .id(1L)
+            .title("title1")
+            .text("text1")
+            .likesCount(1)
+            .commentsCount(1)
+            .build();
 
         PostEntity post2 = PostEntity.builder()
-                .id(2L)
-                .title("title2")
-                .text("text2")
-                .likesCount(2)
-                .commentsCount(2)
-                .build();
+            .id(2L)
+            .title("title2")
+            .text("text2")
+            .likesCount(2)
+            .commentsCount(2)
+            .build();
 
         when(postRepository.countPosts(search)).thenReturn(2);
         when(postRepository.findPosts(search, 0, size))
-                .thenReturn(List.of(post1, post2));
+            .thenReturn(List.of(post1, post2));
 
         when(tagService.getTagsForPosts(List.of(1L, 2L)))
-                .thenReturn(Map.of(
-                        1L, List.of("tag1"),
-                        2L, List.of("tag2")
-                ));
-
+            .thenReturn(Map.of(
+                1L, List.of("tag1"),
+                2L, List.of("tag2")
+            ));
 
         PostPageResponse response = postService.getPosts(search, page, size);
-
 
         assertEquals(2, response.getPosts().size());
         assertTrue(response.isHasNext() == false);
@@ -82,7 +82,7 @@ public class PostServiceTest {
     @Test
     void getPosts_shouldThrowException_whenInvalidPagination() {
         assertThrows(MyException.class, () ->
-                postService.getPosts("test", 0, 10)
+            postService.getPosts("test", 0, 10)
         );
     }
 
@@ -90,17 +90,17 @@ public class PostServiceTest {
     @Test
     void getPostById_shouldReturnPost() {
         PostEntity post = PostEntity.builder()
-                .id(1L)
-                .title("title")
-                .text("text")
-                .likesCount(0)
-                .commentsCount(0)
-                .build();
+            .id(1L)
+            .title("title")
+            .text("text")
+            .likesCount(0)
+            .commentsCount(0)
+            .build();
 
         when(postRepository.findById(1L)).thenReturn(post);
         when(tagService.getTagsForPost(1L)).thenReturn(List.of("tag"));
 
-        PostDto  dto = postService.getPostById(1L);
+        PostDto dto = postService.getPostById(1L);
 
         assertEquals(1L, dto.getId());
         assertEquals("tag", dto.getTags().get(0));
@@ -112,7 +112,7 @@ public class PostServiceTest {
         when(postRepository.findById(1L)).thenReturn(null);
 
         assertThrows(MyException.class, () ->
-                postService.getPostById(1L)
+            postService.getPostById(1L)
         );
     }
 
@@ -125,12 +125,12 @@ public class PostServiceTest {
         request.setTags(List.of("tag1"));
 
         PostEntity saved = PostEntity.builder()
-                .id(1L)
-                .title("title")
-                .text("text")
-                .likesCount(0)
-                .commentsCount(0)
-                .build();
+            .id(1L)
+            .title("title")
+            .text("text")
+            .likesCount(0)
+            .commentsCount(0)
+            .build();
 
         when(postRepository.save(any())).thenReturn(1L);
         when(postRepository.findById(1L)).thenReturn(saved);
@@ -161,7 +161,7 @@ public class PostServiceTest {
         when(postRepository.findById(1L)).thenReturn(null);
 
         assertThrows(MyException.class, () ->
-                postService.deletePost(1L)
+            postService.deletePost(1L)
         );
     }
 
@@ -181,24 +181,24 @@ public class PostServiceTest {
 
     @Test
     void updatePost_shouldUpdate() {
-        PostCreateRequest request = new PostCreateRequest();
+        PostUpdateRequest request = new PostUpdateRequest();
         request.setTitle("new");
         request.setText("new text");
         request.setTags(List.of("tag"));
 
         PostEntity existing = PostEntity.builder()
-                .id(1L)
-                .likesCount(1)
-                .commentsCount(1)
-                .build();
+            .id(1L)
+            .likesCount(1)
+            .commentsCount(1)
+            .build();
 
         PostEntity saved = PostEntity.builder()
-                .id(1L)
-                .title("new")
-                .text("new text")
-                .likesCount(1)
-                .commentsCount(1)
-                .build();
+            .id(1L)
+            .title("new")
+            .text("new text")
+            .likesCount(1)
+            .commentsCount(1)
+            .build();
 
         when(postRepository.findById(1L)).thenReturn(existing);
         when(postRepository.findById(1L)).thenReturn(saved);
@@ -219,7 +219,7 @@ public class PostServiceTest {
         when(postRepository.getImage(1L)).thenReturn(null);
 
         assertThrows(MyException.class, () ->
-                postService.getImage(1L)
+            postService.getImage(1L)
         );
     }
 

@@ -1,4 +1,4 @@
-package ru.yandex.service;
+package ru.yandex.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -22,11 +22,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import ru.yandex.controller.CommentController;
 import ru.yandex.exception.ExceptionType;
 import ru.yandex.exception.MyException;
 import ru.yandex.handler.GlobalExceptionHandler;
 import ru.yandex.model.dto.CommentDto;
+import ru.yandex.service.CommentService;
 
 @ExtendWith(MockitoExtension.class)
 class CommentControllerTest {

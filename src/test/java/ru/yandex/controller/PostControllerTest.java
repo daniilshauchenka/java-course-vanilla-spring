@@ -1,4 +1,4 @@
-package ru.yandex.service;
+package ru.yandex.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -22,12 +22,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import ru.yandex.controller.PostController;
 import ru.yandex.exception.ExceptionType;
 import ru.yandex.exception.MyException;
 import ru.yandex.handler.GlobalExceptionHandler;
 import ru.yandex.model.dto.PostDto;
 import ru.yandex.model.dto.PostPageResponse;
+import ru.yandex.service.PostService;
 
 
 @ExtendWith(MockitoExtension.class)

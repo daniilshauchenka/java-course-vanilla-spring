@@ -13,14 +13,18 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedMethods("*")
-                .allowedHeaders("*");
+        registry.addMapping("/api/**")
+            .allowedOrigins("http://localhost", "http://localhost:80")
+            .allowedMethods("GET", "POST", "PUT", "DELETE");
     }
 
     @Bean
     public MultipartConfigElement multipartConfigElement() {
-        return new MultipartConfigElement("");
+        return new MultipartConfigElement(
+            null,
+            5 * 1024 * 1024,
+            5 * 1024 * 1024,
+            0
+        );
     }
 }

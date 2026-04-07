@@ -1,5 +1,6 @@
 package ru.yandex.handler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,9 +10,8 @@ import ru.yandex.exception.ExceptionType;
 import ru.yandex.exception.MyException;
 import ru.yandex.model.dto.ErrorResponse;
 
-import java.util.List;
-
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MyException.class)
@@ -29,20 +29,25 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<List> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+    public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+
+        ErrorResponse response = new ErrorResponse(
+            ExceptionType.INVALID_REQUEST.name(),
+            String.format("Invalid value '%s' for parameter '%s'", ex.getValue(), ex.getName())
+        );
 
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(List.of());
+            .status(HttpStatus.BAD_REQUEST)
+            .body(response);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleOther(Exception ex) {
         ErrorResponse response = new ErrorResponse(
             ExceptionType.INTERNAL_ERROR.name(),
-            ExceptionType.INTERNAL_ERROR.getMessage()
+            "Internal server error"
         );
-        ex.printStackTrace();
+        log.error("Unhandled exception", ex);
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(response);

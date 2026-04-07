@@ -20,6 +20,7 @@ import ru.yandex.model.dto.ImageDto;
 import ru.yandex.model.dto.PostCreateRequest;
 import ru.yandex.model.dto.PostDto;
 import ru.yandex.model.dto.PostPageResponse;
+import ru.yandex.model.dto.PostUpdateRequest;
 import ru.yandex.service.PostService;
 import ru.yandex.util.ApiPath;
 
@@ -86,7 +87,7 @@ public class PostController {
     @PutMapping("/{id}")
     public PostDto updatePost(
         @PathVariable("id") Long id,
-        @Valid @RequestBody PostCreateRequest request
+        @Valid @RequestBody PostUpdateRequest request
     ) {
         return postService.updatePost(id, request);
     }
